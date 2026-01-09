@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import {WELCOME_EMAIL_TEMPLATE, NEWS_SUMMARY_EMAIL_TEMPLATE} from "@/lib/nodemailer/templates";
+import { WELCOME_EMAIL_TEMPLATE, NEWS_SUMMARY_EMAIL_TEMPLATE } from "@/lib/nodemailer/templates";
 
 export const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -20,6 +20,11 @@ export const sendWelcomeEmail = async ({ email, name, intro }: WelcomeEmailData)
         subject: `Welcome to Stockify - your stock market toolkit is ready!`,
         text: 'Thanks for joining Stockify',
         html: htmlTemplate,
+        attachments: [{
+            filename: 'logo2.svg',
+            path: process.cwd() + '/public/assets/icons/logo2.svg',
+            cid: 'stockifylogo'
+        }]
     }
 
     await transporter.sendMail(mailOptions);
@@ -33,11 +38,16 @@ export const sendNewsSummaryEmail = async (
         .replace('{{newsContent}}', newsContent);
 
     const mailOptions = {
-        from: `"Signalist News" <signalist@jsmastery.pro>`,
+        from: `"Stockify News" <stockify@jsmastery.pro>`,
         to: email,
         subject: `📈 Market News Summary Today - ${date}`,
-        text: `Today's market news summary from Signalist`,
+        text: `Today's market news summary from Stockify`,
         html: htmlTemplate,
+        attachments: [{
+            filename: 'logo2.svg',
+            path: process.cwd() + '/public/assets/icons/logo2.svg',
+            cid: 'stockifylogo'
+        }]
     };
 
     await transporter.sendMail(mailOptions);
